@@ -1,61 +1,63 @@
 'use client';
-
+ 
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Html, useGLTF } from '@react-three/drei';
-import { useState } from 'react';
-
-
+import { useState, Suspense } from 'react';
+ 
 const LandingPage = () => {
   const [labelValue, setLabelValue] = useState(0);
-  
-  let scene;
-  try {
-    const gltf = useGLTF('/glb/Cooler.glb');
-    scene = gltf.scene;
-  } catch (error) {
-    console.error('Error loading model:', error);
-    scene = null;
-  }
-  const cubeClick  = () =>{
-    setLabelValue((prev) => {
-      const newValue = prev + 1;
-      return newValue <= 100 ? newValue : 100;
-    });
-  }
+ 
+  const cubeClick = () => {
+    setLabelValue((prev) => (prev + 1 <= 100 ? prev + 1 : 100));
+  };
+ 
   const ModelLayout = () => {
+    const { scene } = useGLTF('/glb/Cooler.glb');
+ 
     if (!scene) {
-      return <Html position={[0, 1, 0]}><div className="bg-red-500 p-2 text-white rounded">Model failed to load</div></Html>;
+      return (
+        <Html position={[0, 1, 0]}>
+          <div className="bg-red-500 p-2 text-white rounded">Model failed to load</div>
+        </Html>
+      );
     }
+ 
     return (
-      <group >
+      <group>
         <primitive object={scene} scale={1} />
-        <Html position={[-1 , 1, 0]}>
+        <Html position={[-1, 1, 0]}>
           <div className="bg-white p-1 text-xs rounded shadow-md text-black">{labelValue}%</div>
         </Html>
         <CubeBox />
       </group>
     );
-  }
-
+  };
+ 
   const CubeBox = () => {
     return (
-      <mesh position={[0.8, 0.9, 0]} onClick={cubeClick} >
+      <mesh position={[0.8, 0.9, 0]} onClick={cubeClick}>
         <boxGeometry args={[0.4, 0.3, 0.3]} />
         <meshStandardMaterial color="green" />
       </mesh>
     );
-  }
+  };
+ 
   return (
     <div className="w-screen h-screen bg-amber-50">
       <Canvas camera={{ position: [0, 2, 5] }}>
         <ambientLight />
         <directionalLight position={[5, 5, 5]} />
-        <ModelLayout />
+        <Suspense>
+          <ModelLayout />
+        </Suspense>
         <OrbitControls />
       </Canvas>
-      <div className='absolute top-4 right-4 cursor-pointer text-base text-red-600' onClick={() => setLabelValue(0)}>Reset</div>
+      <div className="absolute top-4 right-4 cursor-pointer text-base text-red-600" onClick={() => setLabelValue(0)}>
+        Reset
+      </div>
     </div>
-  )
-}
-
-export default LandingPage
+  );
+};
+ 
+export default LandingPage;
+ 

@@ -1,15 +1,11 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import LandingPage from "./LandingPage";
 
 
 export default function Home() {
-  const router = useRouter()
-  useEffect(() =>{
-    router.push('/LandingPage')
-  },[]);
+
   return (
-    <>
-    Loading
-    </>
+    <div className="w-full text-center">
+      <LandingPage />
+    </div>
   );
 }
