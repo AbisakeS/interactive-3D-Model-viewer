@@ -10,9 +10,8 @@ const LandingPage = () => {
   const cubeClick = () => {
     setLabelValue((prev) => (prev + 1 <= 100 ? prev + 1 : 100));
   };
- 
   const ModelLayout = () => {
-    const MODEL_PATH = `${process.env.NEXT_PUBLIC_BASE_PATH || '/interactive-3D-Model-viewer'}/glb/Cooler.glb`;
+    const MODEL_PATH = `/interactive-3D-Model-viewer/glb/Cooler.glb`;
     const { scene } = useGLTF(MODEL_PATH);
 
     if (!scene) {
